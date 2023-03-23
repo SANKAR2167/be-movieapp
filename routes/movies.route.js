@@ -1,7 +1,6 @@
 import express from "express";
 import { client } from "../index.js";
 import { auth } from "../middleware/auth.js";
-import { ObjectId } from "mongodb";
 
 const router = express.Router()
 
@@ -21,7 +20,7 @@ router.get("/", async function (request, response) {
 
 router.get("/:id", async function (request, response) {
     const { id } = request.params;
-    const movie = await client.db("movieapp").collection("movies").findOne({ _id: ObjectId(id) })
+    const movie = await client.db("movieapp").collection("movies").findOne({ id: id })
     //const movie = movies.find((mv) => mv.id === id);
     console.log(movie);
     movie ? response.send(movie) : response.status(404).send({ message: "movie not found" })
