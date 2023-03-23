@@ -42,7 +42,7 @@ router.delete("/:id", async function (request, response) {
     const result = await client
         .db("movieapp")
         .collection("movies")
-        .deleteOne({ _id: ObjectId(id)});
+        .deleteOne({ id: id });
 
     result.deletedCount > 0
         ? response.send({ message: "movie deleted successfully" })
@@ -56,7 +56,7 @@ router.put("/:id",auth, async function (request, response) {
     const result = await client
         .db("movieapp")
         .collection("movies")
-        .updateOne({ _id: ObjectId(id) }, { $set: data });
+        .updateOne({ id: id }, { $set: data });
 
     console.log(result);
     response.send(result);
