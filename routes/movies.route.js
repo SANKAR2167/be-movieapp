@@ -1,6 +1,7 @@
 import express from "express";
 import { client } from "../index.js";
 import { auth } from "../middleware/auth.js";
+import { ObjectId } from "mongodb";
 
 const router = express.Router()
 
@@ -20,7 +21,7 @@ router.get("/", async function (request, response) {
 
 router.get("/:id", async function (request, response) {
     const { id } = request.params;
-    const movie = await client.db("movieapp").collection("movies").findOne({ id: id })
+    const movie = await client.db("movieapp").collection("movies").findOne({ _id: ObjectId(id) })
     //const movie = movies.find((mv) => mv.id === id);
     console.log(movie);
     movie ? response.send(movie) : response.status(404).send({ message: "movie not found" })
@@ -41,7 +42,7 @@ router.delete("/:id", async function (request, response) {
     const result = await client
         .db("movieapp")
         .collection("movies")
-        .deleteOne({ id: id });
+        .deleteOne({ _id: ObjectId(id)});
 
     result.deletedCount > 0
         ? response.send({ message: "movie deleted successfully" })
@@ -55,7 +56,7 @@ router.put("/:id",auth, async function (request, response) {
     const result = await client
         .db("movieapp")
         .collection("movies")
-        .updateOne({ id: id }, { $set: data });
+        .updateOne({ _id: ObjectId(id) }, { $set: data });
 
     console.log(result);
     response.send(result);
