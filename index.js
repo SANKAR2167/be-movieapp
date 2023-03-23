@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 dotenv.config()
 const app = express();
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 // Connection
 // const MONGO_URL = "mongodb://127.0.0.1";
@@ -23,7 +23,7 @@ app.get("/", function (request, response) {
 
 app.get("/movies", async function (request, response) {
 
-    if (request.query.rating){
+    if (request.query.rating) {
         request.query.rating = +request.query.rating;
     }
 
@@ -47,33 +47,33 @@ app.post("/movies", async function (request, response) {
     const data = request.body;
     console.log(data);
     const result = await client
-    .db("movieapp")
-    .collection("movies")
-    .insertMany(data);
+        .db("movieapp")
+        .collection("movies")
+        .insertMany(data);
     response.send(result);
 });
 
-app.delete("/movies/:id", async function (request, response){
+app.delete("/movies/:id", async function (request, response) {
     const { id } = request.params;
     const result = await client
-    .db("movieapp")
-    .collection("movies")
-    .deleteOne({id : id});
+        .db("movieapp")
+        .collection("movies")
+        .deleteOne({ id: id });
 
-    result.deletedCount > 0 
-    ? response.send({ message: "movie deleted successfully"})
-    : response.status(404).send({message: "movie not found"});
+    result.deletedCount > 0
+        ? response.send({ message: "movie deleted successfully" })
+        : response.status(404).send({ message: "movie not found" });
 })
 
 
 app.put("/movies/:id", async function (request, response) {
-    const {id} = use.params;
+    const { id } = use.params;
     const data = request.body;
 
     const result = await client
-    .db("movieapp")
-    .collection("movies")
-    .updateOne({id : id}, {$set: data});
+        .db("movieapp")
+        .collection("movies")
+        .updateOne({ id: id }, { $set: data });
 
     console.log(result);
     response.send(result);
