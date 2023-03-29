@@ -4,7 +4,7 @@ import { auth } from "../middleware/auth.js";
 
 const router = express.Router()
 
-router.get("/", async function (request, response) {
+router.get("/", auth,async function (request, response) {
 
     if (request.query.rating) {
         request.query.rating = +request.query.rating;
