@@ -4,7 +4,7 @@ import { auth } from "../middleware/auth.js";
 
 const router = express.Router()
 
-router.get("/", auth,async function (request, response) {
+router.get("/", async function (request, response) {
 
     if (request.query.rating) {
         request.query.rating = +request.query.rating;
@@ -48,7 +48,7 @@ router.delete("/:id", async function (request, response) {
         : response.status(404).send({ message: "movie not found" });
 })
 
-router.put("/:id",auth, async function (request, response) {
+router.put("/:id", async function (request, response) {
     const { id } = use.params;
     const data = request.body;
 
