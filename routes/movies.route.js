@@ -1,6 +1,7 @@
 import express from "express";
 import { client } from "../index.js";
 import { auth } from "../middleware/auth.js";
+import { ObjectId } from "mongodb";
 
 const router = express.Router()
 
@@ -19,8 +20,9 @@ router.get("/", async function (request, response) {
 });
 
 router.get("/:id", async function (request, response) {
-    const { id } = request.params;
-    const movie = await client.db("movieapp").collection("movies").findOne({ id: id })
+    // const { id } = request.params;
+    const id = new ObjectId(request.params.id);
+    const movie = await client.db("movieapp").collection("movies").findOne({ _id: id })
     //const movie = movies.find((mv) => mv.id === id);
     console.log(movie);
     movie ? response.send(movie) : response.status(404).send({ message: "movie not found" })
@@ -43,11 +45,12 @@ router.post("/", async function (request, response) {
 });
 
 router.delete("/:id", async function (request, response) {
-    const { id } = request.params;
+    // const { id } = request.params;
+    const id = new ObjectId(request.params.id);
     const result = await client
         .db("movieapp")
         .collection("movies")
-        .deleteOne({ id: id });
+        .deleteOne({ _id: id });
 
     result.deletedCount > 0
         ? response.send({ message: "movie deleted successfully" })
@@ -56,12 +59,13 @@ router.delete("/:id", async function (request, response) {
 
 router.put("/:id", async function (request, response) {
     try {
-        const { id } = request.params;
+        // const { id } = request.params;
+        const id = new ObjectId(request.params.id);
         const data = request.body;
         const result = await client
             .db("movieapp")
             .collection("movies")
-            .updateOne({ id: id }, { $set: data });
+            .updateOne({ _id: id }, { $set: data });
         response.json(result);
     } catch (error){
         console.log(error);
