@@ -20,6 +20,7 @@ await client.connect(); // top level await
 console.log("Mongo is connected !!!");
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true}))
 app.use(cors());
 
 app.get("/", function (request, response) {

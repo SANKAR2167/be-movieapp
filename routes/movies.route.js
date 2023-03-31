@@ -27,13 +27,19 @@ router.get("/:id", async function (request, response) {
 });
 
 router.post("/", async function (request, response) {
-    const data = request.body;
-    console.log(data);
-    const result = await client
-        .db("movieapp")
-        .collection("movies")
-        .insertMany(data);
-    response.send(result);
+    try {
+        const data = request.body;
+        console.log("data", data);
+        const result = await client
+            .db("movieapp")
+            .collection("movies")
+            .insertOne(data);
+        response.json(result);
+    } catch (error) {
+        console.log(error);
+        return response.json(error.message)
+    }
+
 });
 
 router.delete("/:id", async function (request, response) {
@@ -49,16 +55,19 @@ router.delete("/:id", async function (request, response) {
 })
 
 router.put("/:id", async function (request, response) {
-    const { id } = use.params;
-    const data = request.body;
-
-    const result = await client
-        .db("movieapp")
-        .collection("movies")
-        .updateOne({ id: id }, { $set: data });
-
-    console.log(result);
-    response.send(result);
+    try {
+        const { id } = request.params;
+        const data = request.body;
+        const result = await client
+            .db("movieapp")
+            .collection("movies")
+            .updateOne({ id: id }, { $set: data });
+        response.json(result);
+    } catch (error){
+        console.log(error);
+        return response.json(error.message)
+    }
+    
 });
 
 export default router;
